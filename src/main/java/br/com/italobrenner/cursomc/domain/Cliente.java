@@ -54,7 +54,7 @@ public class Cliente implements Serializable {
 		this.nome = nome;
 		this.email = email;
 		this.cpfOuCnpj = cpfOuCnpj;
-		this.tipoCliente = tipoCliente.getCod();
+		this.tipoCliente = (tipoCliente != null) ? tipoCliente.getCod() : null;
 	}
 
 	public Integer getId() {
@@ -94,7 +94,7 @@ public class Cliente implements Serializable {
 	}
 
 	public void setTipoCliente(TipoCliente tipoCliente) {
-		this.tipoCliente = tipoCliente.getCod();
+		this.tipoCliente = (tipoCliente != null) ? tipoCliente.getCod() : null;
 	}
 
 	public List<Endereco> getEnderecos() {
