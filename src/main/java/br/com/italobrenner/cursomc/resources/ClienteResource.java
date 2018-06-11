@@ -19,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.italobrenner.cursomc.domain.Cliente;
 import br.com.italobrenner.cursomc.dto.ClienteDTO;
+import br.com.italobrenner.cursomc.dto.ClienteNewDTO;
 import br.com.italobrenner.cursomc.services.ClienteService;
 
 @RestController
@@ -36,8 +37,8 @@ public class ClienteResource {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteDTO clienteDTO) {
-		Cliente cliente = clienteService.fromDTO(clienteDTO);
+	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO clienteNewDTO) {
+		Cliente cliente = clienteService.fromDTO(clienteNewDTO);
 		Cliente mCliente = clienteService.insert(cliente);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(mCliente.getId()).toUri();
 		return ResponseEntity.created(uri).build();
