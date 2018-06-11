@@ -3,6 +3,8 @@ package br.com.italobrenner.cursomc.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -28,6 +30,7 @@ public class ClienteService {
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
 	}
 
+	@Transactional
 	public Cliente insert(Cliente cliente) {
 		cliente.setId(null);
 		return clienteRepository.save(cliente);
