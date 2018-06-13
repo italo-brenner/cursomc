@@ -11,6 +11,7 @@ import br.com.italobrenner.cursomc.domain.ItemPedido;
 import br.com.italobrenner.cursomc.domain.PagamentoComBoleto;
 import br.com.italobrenner.cursomc.domain.Pedido;
 import br.com.italobrenner.cursomc.domain.enums.EstadoPagamento;
+import br.com.italobrenner.cursomc.repositories.ClienteRepository;
 import br.com.italobrenner.cursomc.repositories.ItemPedidoRepository;
 import br.com.italobrenner.cursomc.repositories.PagamentoRepository;
 import br.com.italobrenner.cursomc.repositories.PedidoRepository;
@@ -35,6 +36,9 @@ public class PedidoService {
 	
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
+	
+	@Autowired
+	private ClienteRepository clienteRepository;
 		
 	public Pedido find(Integer id) {
 		Optional<Pedido> pedido = pedidoRepository.findById(id);
@@ -46,6 +50,7 @@ public class PedidoService {
 	public Pedido insert(Pedido pedido) {
 		pedido.setId(null);
 		pedido.setInstante(new Date());
+		pedido.setCliente(clienteRepository.findById(pedido.getCliente().getId()).get());
 		pedido.getPagamento().setEstadoPagamento(EstadoPagamento.PENDENTE);
 		pedido.getPagamento().setPedido(pedido);
 		if (pedido.getPagamento() instanceof PagamentoComBoleto) {
@@ -56,10 +61,12 @@ public class PedidoService {
 		pagamentoRepository.save(mPedido.getPagamento());
 		for (ItemPedido ip : mPedido.getItens()) {
 			ip.setDesconto(0.);
+			ip.setProduto(produtoRepository.findById(ip.getProduto().getId()).get());
 			ip.setPreco(produtoRepository.findById(ip.getProduto().getId()).get().getPreco());
 			ip.setPedido(mPedido);
 		}
-		itemPedidoRepository.saveAll(pedido.getItens());
+		itemPedidoRepository.saveAll(mPedido.getItens());
+		System.out.println(mPedido);
 		return mPedido;
 	}
 
