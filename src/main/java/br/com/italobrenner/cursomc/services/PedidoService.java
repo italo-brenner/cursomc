@@ -4,9 +4,13 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.italobrenner.cursomc.domain.Cliente;
 import br.com.italobrenner.cursomc.domain.ItemPedido;
 import br.com.italobrenner.cursomc.domain.PagamentoComBoleto;
 import br.com.italobrenner.cursomc.domain.Pedido;
@@ -17,6 +21,8 @@ import br.com.italobrenner.cursomc.repositories.PagamentoRepository;
 import br.com.italobrenner.cursomc.repositories.PedidoRepository;
 import br.com.italobrenner.cursomc.repositories.ProdutoRepository;
 import br.com.italobrenner.cursomc.resources.BoletoService;
+import br.com.italobrenner.cursomc.security.UserSS;
+import br.com.italobrenner.cursomc.services.exception.AuthorizationException;
 import br.com.italobrenner.cursomc.services.exception.ObjectNotFoundException;
 
 @Service
@@ -42,7 +48,7 @@ public class PedidoService {
 	
 	@Autowired
 	private EmailService emailService;
-		
+	
 	public Pedido find(Integer id) {
 		Optional<Pedido> pedido = pedidoRepository.findById(id);
 		return pedido.orElseThrow(() -> new ObjectNotFoundException(
@@ -71,6 +77,17 @@ public class PedidoService {
 		itemPedidoRepository.saveAll(mPedido.getItens());
 		emailService.sendOrderConfirmationHtmlEmail(mPedido);
 		return mPedido;
+	}
+	
+	public Page<Pedido> findPage(Integer page, Integer linesPerPages, String orderBy, String direction) {
+		UserSS user = UserService.authenticated();
+		if (user == null) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		PageRequest pageRequest = PageRequest.of(page, linesPerPages, Direction.valueOf(direction), orderBy);
+		Optional<Cliente> optCliente = clienteRepository.findById(user.getId());
+		Cliente cliente = optCliente.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado! Id: " + user.getId() + ", Tipo: " + Cliente.class.getName()));
+		return pedidoRepository.findByCliente(cliente, pageRequest);
 	}
 
 }
