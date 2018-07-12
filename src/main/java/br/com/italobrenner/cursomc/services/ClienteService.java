@@ -42,9 +42,6 @@ public class ClienteService {
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
-	// @Autowired
-	// private S3Service s3Service;
-	
 	@Autowired
 	private FileService fileService;
 	
