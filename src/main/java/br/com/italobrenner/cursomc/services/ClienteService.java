@@ -5,8 +5,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -15,6 +13,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.com.italobrenner.cursomc.domain.Cidade;
 import br.com.italobrenner.cursomc.domain.Cliente;
@@ -42,8 +42,11 @@ public class ClienteService {
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
+	// @Autowired
+	// private S3Service s3Service;
+	
 	@Autowired
-	private S3Service s3Service;
+	private FileService fileService;
 	
 	@Autowired
 	private ImageService imageService;
@@ -135,7 +138,7 @@ public class ClienteService {
 		
 		String fileName = prefix + user.getId() + ".jpg";
 
-		return s3Service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image");
+		return fileService.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image");
 	}
 
 }
