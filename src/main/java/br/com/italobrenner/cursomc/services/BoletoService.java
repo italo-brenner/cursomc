@@ -1,4 +1,4 @@
-package br.com.italobrenner.cursomc.resources;
+package br.com.italobrenner.cursomc.services;
 
 import java.util.Calendar;
 import java.util.Date;

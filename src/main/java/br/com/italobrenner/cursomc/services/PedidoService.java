@@ -20,7 +20,6 @@ import br.com.italobrenner.cursomc.repositories.ItemPedidoRepository;
 import br.com.italobrenner.cursomc.repositories.PagamentoRepository;
 import br.com.italobrenner.cursomc.repositories.PedidoRepository;
 import br.com.italobrenner.cursomc.repositories.ProdutoRepository;
-import br.com.italobrenner.cursomc.resources.BoletoService;
 import br.com.italobrenner.cursomc.security.UserSS;
 import br.com.italobrenner.cursomc.services.exception.AuthorizationException;
 import br.com.italobrenner.cursomc.services.exception.ObjectNotFoundException;
