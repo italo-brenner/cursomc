@@ -37,4 +37,9 @@ public class S3Service extends AbstractFileService {
 		}
 	}
 
+	@Override
+	public byte[] downloadFile(String fileName) {
+		throw new UnsupportedOperationException("Método não implementado");
+	}
+
 }

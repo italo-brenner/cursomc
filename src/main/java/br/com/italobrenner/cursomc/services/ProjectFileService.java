@@ -6,10 +6,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 
+import org.apache.commons.io.FileUtils;
+
 import br.com.italobrenner.cursomc.services.exception.FileException;
 
 public class ProjectFileService extends AbstractFileService {
 
+	@Override
 	public URI uploadFile(InputStream is, String fileName, String contentType) {
 		try {
 			String filePath = "files";
@@ -26,6 +29,17 @@ public class ProjectFileService extends AbstractFileService {
 			}
 			outputStream.close();
 			return null;
+		} catch (IOException e) {
+			throw new FileException("IOException");
+		}
+	}
+	
+	@Override
+	public byte[] downloadFile(String fileName) {
+		
+		try {
+			byte[] image = FileUtils.readFileToByteArray(new File("files" + File.separator + fileName));
+			return image;
 		} catch (IOException e) {
 			throw new FileException("IOException");
 		}

@@ -150,5 +150,10 @@ public class ClienteService {
 
 		return fileService.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image");
 	}
+	
+	public byte[] downloadProfilePicture(Integer clienteId) {
+		String fileName = prefix + clienteId + ".jpg";
+		return fileService.downloadFile(fileName);
+	}
 
 }
